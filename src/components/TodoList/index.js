@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { todoRemainSelector } from '../redux/selector';
+import todoListSlice from '../Todo/todoSlice';
 
 export default function TodoList() {
 
@@ -14,21 +15,22 @@ export default function TodoList() {
   const dispatch = useDispatch()
   const todoList = useSelector(todoRemainSelector)
   // const searchText = useSelector(searchTextSelector)
-  const elementTodoList = todoList.map((todo)=> {
+  const elementTodoList = todoList.map((todo) => {
     return <Todo key={todo.id} name={todo.name} priority={todo.priority} completed={todo.completed} id={todo.id} />
   })
   const handleAddClick = () => {
     // dispatch() bắn đi 1 action
-    dispatch(addTodo({
-      id: uuidv4(),
-      name: todoName,
-      priority: priority,
-      completed: false,
-    }))
+    dispatch(
+      todoListSlice.actions.addTodo({
+        id: uuidv4(),
+        name: todoName,
+        priority: priority,
+        completed: false,
+      }))
     setTodoName('')
     setPriority('')
   }
-  const handleInputChange = (e) => { 
+  const handleInputChange = (e) => {
     setTodoName(e.target.value)
   }
   const handleChangePriority = (value) => {
@@ -41,7 +43,7 @@ export default function TodoList() {
       </Col>
       <Col span={24}>
         <Input.Group style={{ display: 'flex' }} compact>
-          <Input value={todoName} onChange={handleInputChange}/>
+          <Input value={todoName} onChange={handleInputChange} />
           <Select onChange={handleChangePriority} value={priority}>
             <Select.Option value='High' label='High'>
               <Tag color='red'>High</Tag>
